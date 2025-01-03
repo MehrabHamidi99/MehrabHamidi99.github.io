@@ -1,14 +1,9 @@
 github_users:
-  - torvalds
-  - alshedivat
+  - mehrabhamidi99
 
 repo_description_lines_max: 2
 
 github_repos:
-  - alshedivat/al-folio
-  - jekyll/jekyll
-  - twbs/bootstrap
-  - jquery/jquery
-  - FortAwesome/Font-Awesome
-  - mathjax/MathJax
-  - jpswalsh/academicons
+  - MehrabHamidi99/DAG_pgm
+  - MehrabHamidi99/ReverseEngineeringNetworks
+  - MehrabHamidi99/LikelihoodFree
