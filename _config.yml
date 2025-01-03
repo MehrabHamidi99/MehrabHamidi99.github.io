@@ -7,29 +7,6 @@ first_name: Mehrab
 middle_name: 
 last_name: Hamidi
 
-
-# -----------------------------------------------------------------------------
-# Social integration
-# -----------------------------------------------------------------------------
-
-github_username: mehrabhamidi99 # your GitHub user name
-gitlab_username: # your GitLab user name
-twitter_username: MehrabHamidi78 # your Twitter handle
-linkedin_username: mehrab-hamidi-42025b192 # your LinkedIn user name
-scholar_userid: hsU_jcQAAAAJ&hl # your Google Scholar ID
-orcid_id: # your ORCID ID
-medium_username: # your Medium username
-quora_username: # your Quora username
-publons_id: # your ID on Publons
-research_gate_profile: # your profile on ResearchGate
-blogger_url: # your blogger URL
-work_url: # work page URL
-keybase_username: # your keybase user name
-wikidata_id: # your wikidata id
-dblp_url: # your DBLP profile url
-stackoverflow_id: #your stackoverflow id
-
-
 contact_note: >
   You can read me at mehrab[dot]hamidi[at]mila.quebec
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
