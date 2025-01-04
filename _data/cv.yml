@@ -3,19 +3,14 @@
   contents:
     - title: Deep Learning Theory
       items:
-        - Interp
-    - title: Deep Learning Theory
+        - Geometircal Representation Learning
+    - title: Interpretability
       items:
-        - Multi-Modal Learning
-        - Representation Learning
-        - Self-Supervised Learning
-        - Out-of-Distribution Robustness
-        - Diffusion Models
-    - title: Learning on Graphs
+        - Mechanistic Interpretability
+    - title: Flow Networks
       items:
-        - Knowledge Graphs
-        - Graph Representation Learning
-        - Temporal Graphs
+        - Energy Matching
+        - Optimal Transport Networks
 
 - title: Education
   type: time_table
