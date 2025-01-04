@@ -14,13 +14,13 @@
     - title: PhD in Computer Science
       institution: Université de Montréal, Montreal, Canada
       year: 2024-present
-      description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
+      # description:
+      #   - Description 1.
+      #   - Description 2.
+      #   - title: Description 3.
+      #     contents:
+      #       - Sub-description 1.
+      #       - Sub-description 2.
     - title: M.Sc. in Computer Science 
       institution: Mcgill University, Montreal, Canada
       year: 2022-2024
