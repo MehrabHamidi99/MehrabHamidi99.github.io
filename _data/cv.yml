@@ -2,7 +2,8 @@
   type: nested_list
   contents:
     - title: Deep Learning Theory
-      it
+      items:
+        - Interp
     - title: Deep Learning Theory
       items:
         - Multi-Modal Learning
