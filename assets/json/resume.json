@@ -17,13 +17,31 @@
   },
   "work": [
     {
-      "name": "Institute for Advanced Study, Princeton University",
-      "position": "Professor of Theoretical Physics",
-      "url": "https://example.com",
-      "startDate": "1933-01-01",
-      "endDate": "1955-01-01",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
-      "highlights": ["Relativity"]
+      "name": "McGill University",
+      "position": "Research Intern",
+      "url": "",
+      "startDate": "2021-01-01",
+      "endDate": "2022-06-01",
+      "summary": "In this experience I got to work on a biologuical casuality problem with interatablel nature, (SNPs, genotype/phenotype data) and we developed a variational likelihood free sampling method for estimating the posterior distribution.",
+      "highlights": ["Likelihood Free Methods"]
+    },
+    {
+      "name": "AIMed, Iran",
+      "position": "Machine Learning Scientist",
+      "url": "",
+      "startDate": "2020-01-01",
+      "endDate": "2021-01-01",
+      "summary": "I worked on bunch of medical image problems, namely using CT-scan images for detecting Covid-19 and its veriants and lung cancer and etc.",
+      "highlights": ["Medical Images"]
+    },
+    {
+      "name": "FANAP, Iran",
+      "position": "Machine Learning Engineer",
+      "url": "",
+      "startDate": "2019-01-01",
+      "endDate": "2020-01-01",
+      "summary": "I worked on a project about Automatic Speech Recognition using cnn-based model to capture time dependent features",
+      "highlights": ["ASR"]
     }
   ],
   "education": [
