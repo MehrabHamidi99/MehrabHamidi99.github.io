@@ -224,12 +224,20 @@
   ],
   "projects": [
     {
-      "name": "Quantum Computing",
-      "summary": "Quantum computing is the use of quantum-mechanical phenomena such as superposition and entanglement to perform computation. Computers that perform quantum computations are known as quantum computers.",
-      "highlights": ["Quantum Teleportation", "Quantum Cryptography"],
-      "startDate": "2018-01-01",
-      "endDate": "2018-01-01",
-      "url": "https://example.com"
+      "name": "Spaghettification in Neural Network Representations",
+      "summary": "We studied architectural symmetries and geometrical causes related to neural collapse and lossles compression via a phenomena called spaghettification.",
+      "highlights": ["Neural collapse", "Lossless compression"],
+      "startDate": "2023-12-01",
+      "endDate": "present",
+      "url": ""
+    },
+    {
+      "name": "Synthetic Benchmarks of TGN Methods",
+      "summary": "This project we focuses on proposing a collections of synthetic tasks specifically designed to benchmark the ability of current TGL methods to capture and model archetypal sequential structures and patterns in dynamic graphs.",
+      "highlights": ["Graph Neural Networks", "Temporal Analysis"],
+      "startDate": "2024-07-01",
+      "endDate": "present",
+      "url": ""
     }
   ]
 }
