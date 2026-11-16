@@ -12,7 +12,7 @@ That is the question behind our [representation collapse project](https://github
 
 The theory gives us a precise language for that question. It also exposes a trap. **A shrinking perturbation, a low-dimensional state cloud, and the loss of useful memory are three different observations.** They can occur together, but none automatically establishes the others.
 
-Here is where the project stands, based on experiments verified in October 2026. We have a reproduced graph prediction failure, suggestive but incomplete dynamical evidence, and a separate LSTM that remembers a bit perfectly through 6,144 distractor steps. Those results help narrow the explanation; they do not yet establish a general collapse mechanism.
+Here is where the project stands, starting with experiments verified in October 2026 and a new exploratory follow-up from November 16. We have a reproduced graph prediction failure, suggestive but incomplete dynamical evidence, and a separate LSTM that remembers a bit perfectly through 6,144 distractor steps. Those results help narrow the explanation; they do not yet establish a general collapse mechanism.
 
 ## Start with one complete cycle
 
@@ -32,7 +32,7 @@ M = J[P−1] ··· J[1] J[0]
 
 The earliest update acts first, on the right. This matrix is the discrete *monodromy matrix*. Its eigenvalues, usually written `μ`, are the Floquet multipliers. They describe local stability of the periodic orbit.
 
-There is an essential qualification: **periodic input alone does not make this a periodic return map**. A network may keep drifting, have a response with a longer period, or follow different trajectories depending on its history. We need to check that the complete state returns, and that the step derivatives repeat. If the state returns only after two input cycles, that longer period is the relevant one. Without verified periodicity, the same Jacobian product remains useful, but we call it a finite-time propagator.
+There is an essential qualification: **periodic input alone does not make the hidden trajectory or its Jacobians periodic**. A network may keep drifting, have a response with a longer period, or follow different trajectories depending on its history. We need to check that the complete state returns, and that the step derivatives repeat. If the state returns only after two input cycles, that longer period is the relevant one. Without verified periodicity, the same Jacobian product remains useful, but we call it a finite-time propagator.
 
 Period length also matters when comparing numbers. Following two cycles instead of one squares the multipliers, even though the dynamics have not changed. A multiplier of 0.8 over one cycle becomes 0.64 over two. To compare attenuation across different periods, use the rate per update:
 
@@ -198,9 +198,23 @@ Pooled hidden-plus-cell participation ratio was close to one, while opposite-cue
 
 This is one trained seed and one bit, not a capacity estimate or proof of stable basins. It is nevertheless a valuable negative result for harmful repetition at the tested horizons. The graph and memory settings are separate experiments, not a controlled architecture comparison.
 
+## November 16 follow-up: four bits survive too
+
+We have now run a first memory-load experiment: write 1, 4, 16 or 64 independent bits at once, then recover the full vector after the body. Each load gets a separate seed-0 fit with the same architecture: 69 input channels and an LSTM with 64 hidden units. This is still categorical recall, not a continuous high-dimensional signal or a graph.
+
+The 1-bit and 4-bit fits passed the worker's competence gates. Both recovered the complete vector in **every tested episode through 1,536 distractor steps**, in periodic and matched-control arms. Each fit was tested on ten conditions and 20,480 episode rows, with cue panels reused across conditions. The prespecified periodic-minus-control error contrast was zero. The 16-bit and 64-bit fits failed acquisition gates and stopped before held-out testing; those failures cannot establish repetition-induced forgetting.
+
+[![For one-bit and four-bit LSTMs, complete-state participation ratio stays constant or rises as the delay grows; covariance trace also grows while recall remains perfect.](/assets/portfolio/repetition-multibit.png)](/assets/portfolio/repetition-multibit.png)
+
+*One trained seed per load. Curves average four forcing-specific, cue-centered covariance summaries per arm; periodic and control curves nearly overlap. Only competent loads appear. No seed-population uncertainty is estimated.*
+
+The four-bit model's complete-state participation ratio increased from about **4.07 immediately after WRITE to 7.93 at 1,536 steps**. A nonlinear encoding of 16 possible cue vectors can have centered covariance rank as high as 15, so a participation ratio above four is not paradoxical. Here useful recall survives while measured dimension grows.
+
+These are exploratory results. An independent reducer checked the raw test arrays and covariance calculations, but validation logits and explicit counts were not saved: competence gates are verified only against their recorded summaries. The [full report](https://github.com/MehrabHamidi99/representation_collapse/blob/d1ad0790bda4b43f7f4bcebc7596e04d4b9a9ef4/docs/November/2026-11-16/mila/report/multibit-discovery-results.md) preserves that limitation and both failed fits. We have not measured a Floquet spectrum or established stable memory basins for these models.
+
 ## The next question is about useful memory load
 
-We are preparing a higher-dimensional memory task that writes 1, 4, 16 or 64 independent bits at once, then asks the model to recover the full vector after the distractor body. The architecture stays fixed across loads: 69 input channels and an LSTM with 64 hidden units. Each load must first pass its competence checks before we interpret forgetting. We can then vary repetition and delay at fixed weights, comparing paired periodic and control bodies. A later, stronger extension will reveal a query address only after the body, testing access to an item that the model could not select in advance.
+The immediate challenge is to make the larger-load models reliably acquire the task before testing forgetting, while retaining raw validation outputs and replaying the final checkpoint independently. New retention tests need fresh held-out panels and multiple seeds. A later, stronger extension will reveal a query address only after the body, testing access to an item that the model could not select in advance. Continuous-valued cues will test a different memory requirement from a finite set of bit vectors.
 
 For the graph model, training at several block lengths and with variable timing will test whether the failure timescale follows the training schedule. Multiple independent seeds are needed in both settings.
 
