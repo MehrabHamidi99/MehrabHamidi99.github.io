@@ -1,0 +1,70 @@
+name: Mehrab Hamidi
+role: Machine learning researcher
+location: Montréal, Canada
+email: mehrab.hamidi@mila.quebec
+headline: Understanding how neural networks learn, reason, and generalize.
+intro: I'm a PhD student at Université de Montréal and a researcher at Mila. I work at the intersection of deep learning theory, optimization, and mechanistic interpretability.
+contact: Interested in research scientist and research engineer opportunities, and collaborations on understanding and improving learning systems.
+url: https://mehrabhamidi99.github.io
+links:
+  - label: Google Scholar
+    url: https://scholar.google.com/citations?user=hsU_jcQAAAAJ&hl=en
+  - label: GitHub
+    url: https://github.com/MehrabHamidi99
+  - label: LinkedIn
+    url: https://www.linkedin.com/in/mehrab-hamidi-42025b192/
+  - label: Mila profile
+    url: https://mila.quebec/en/directory/mehrab-hamidi
+supervisors:
+  - name: Ioannis Mitliagkas
+    url: https://mitliagkas.github.io/
+  - name: Aristide Baratin
+    url: https://www.arisbar.org/
+research:
+  - number: '01'
+    title: Geometry & optimization
+    text: Studying the structure of neural representations and loss landscapes to understand learning dynamics and improve optimization.
+    tags: [Deep learning theory, Optimization]
+  - number: '02'
+    title: Mechanistic interpretability
+    text: Connecting a model's internal computations to its behavior, with a focus on vision-based agents and sequential decisions.
+    tags: [Interpretability, Agent behavior]
+  - number: '03'
+    title: Temporal reasoning
+    text: Designing controlled benchmarks that reveal how graph models handle memory, delayed effects, and long-range dependencies.
+    tags: [Graph learning, Evaluation]
+education:
+  - period: 2024–present
+    degree: PhD in Computer Science
+    institution: Université de Montréal · Mila
+    detail: Supervised by Ioannis Mitliagkas and Aristide Baratin.
+  - period: 2022–2024
+    degree: MSc in Computer Science
+    institution: McGill University · Mila
+    detail: Supervised by David Rolnick. Research on neural network geometry and interpretability.
+  - period: 2017–2022
+    degree: BSc in Computer Science
+    institution: Sharif University of Technology
+    detail: Minor in Mathematics (2019–2022).
+experience:
+  - period: 2021–2022
+    role: Research Intern
+    organization: McGill University
+    detail: Worked on biological causality and variational likelihood-free inference using genotype and phenotype data.
+  - period: 2020–2021
+    role: Machine Learning Scientist
+    organization: AIMed
+    detail: Worked on deep learning for medical imaging, including CT-based analysis of COVID-19 and lung disease.
+  - period: 2019–2020
+    role: Machine Learning Engineer
+    organization: FANAP
+    detail: Worked on automatic speech recognition with convolutional models for temporal features.
+skills:
+  - name: Research
+    items: [Deep learning, Optimization, Interpretability, Graph neural networks, Statistical inference]
+  - name: Tools
+    items: [Python, PyTorch, NumPy, NetworkX, R, Julia, C++, LaTeX]
+  - name: Mathematical foundations
+    items: [Topology, Measure theory, Convex optimization, Game theory]
+award: Inter-Math-AI Scholarship, 2024
+personal: Outside research, I enjoy hiking, tennis, and making music. I play the violin, kamancheh, and saxophone.

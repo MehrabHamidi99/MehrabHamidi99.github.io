@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}{% if title != profile.name %} · {{ profile.name }}{% else %} · Machine Learning Researcher{% endif %}</title>
+  <meta name="description" content="{{ description }}">
+  <meta name="theme-color" content="#f8f8f3">
+  <link rel="canonical" href="{{ profile.url }}{{ path }}">
+  <meta property="og:type" content="{{ 'article' if post else 'website' }}">
+  <meta property="og:title" content="{{ title }} · Machine Learning Research">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ profile.url }}{{ path }}">
+  <meta property="og:image" content="{{ profile.url }}/assets/portfolio/portrait.jpg">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/assets/portfolio/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="Mehrab Hamidi · Blog" href="/feed.xml">
+  <link rel="stylesheet" href="/assets/portfolio/site.css">
+  <script src="/assets/portfolio/site.js" defer></script>
+  <script type="application/ld+json">{{ schema|tojson }}</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="wordmark" href="/" aria-label="Mehrab Hamidi home"><span class="monogram">mh<span>·</span></span><span>Mehrab Hamidi</span></a>
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="navigation" hidden>Menu <span aria-hidden="true">☰</span></button>
+    <nav id="navigation" aria-label="Main navigation">
+      {% for label, href, key in [('About', '/', 'home'), ('Publications', '/publications/', 'publications'), ('News', '/news/', 'news'), ('Blog', '/blog/', 'blog'), ('CV', '/cv/', 'cv')] %}
+      <a href="{{ href }}" {% if active == key %}aria-current="page"{% endif %}>{{ label }}</a>
+      {% endfor %}
+      <a class="nav-contact" href="mailto:{{ profile.email }}">Get in touch <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+<main id="main">{% block content %}{% endblock %}</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div><a class="footer-name" href="/">Mehrab Hamidi<span class="accent">.</span></a><p>Machine learning research · Montréal</p></div>
+    <div class="footer-links"><a href="mailto:{{ profile.email }}">Email ↗</a><a href="{{ profile.links[1].url }}">GitHub ↗</a><a href="/feed.xml">RSS ↗</a></div>
+    <p class="copyright">© {{ year }} Mehrab Hamidi</p>
+  </div>
+</footer>
+</body>
+</html>

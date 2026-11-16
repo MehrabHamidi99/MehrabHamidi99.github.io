@@ -1,0 +1,2 @@
+{% extends 'base.html' %}{% from 'macros.html' import news_row %}
+{% block content %}<div class="container page-content narrow"><header class="page-heading"><div class="eyebrow">From the research desk</div><h1>News<span class="accent">.</span></h1><p>New papers, research updates, and milestones.</p></header><div class="news-list">{% for item in news %}{{ news_row(item) }}{% endfor %}</div></div>{% endblock %}

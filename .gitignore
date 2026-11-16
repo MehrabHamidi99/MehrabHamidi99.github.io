@@ -11,3 +11,7 @@ assets/libs/
 node_modules/
 vendor
 .idea
+# Portfolio build and local development
+.venv/
+__pycache__/
+.DS_Store

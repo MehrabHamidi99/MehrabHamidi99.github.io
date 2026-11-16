@@ -1,0 +1,123 @@
+# Keep newest work first. Use selected: true to feature a paper on the homepage.
+# Label preprints and workshops accurately; link to the official record.
+- id: geometry-sam
+  title: Navigating Potholes with Geometry-Aware Sharpness Minimization
+  authors: Simon Dufort-Labbé, Mehrab Hamidi, Razvan Pascanu, Ioannis Mitliagkas, Damien Scieur, Aristide Baratin
+  year: 2026
+  venue: arXiv preprint
+  type: Preprint
+  topic: Optimization
+  selected: true
+  summary: Combining a slowly learned loss geometry with sharpness-aware perturbations to improve neural network optimization.
+  links:
+    - label: Paper
+      url: https://arxiv.org/abs/2605.16134
+    - label: PDF
+      url: https://arxiv.org/pdf/2605.16134
+- id: t-grab
+  title: 'T-GRAB: A Synthetic Diagnostic Benchmark for Learning on Temporal Graphs'
+  authors: Alireza Dizaji, Benedict Aaron Tjandra, Mehrab Hamidi, Shenyang Huang, Guillaume Rabusseau
+  year: 2026
+  venue: ACM SIGKDD 2026
+  type: Conference
+  topic: Graph learning
+  selected: true
+  summary: Controlled synthetic tasks that test temporal graph models on repetition, delayed causal effects, and long-range dependencies.
+  note: Earlier version presented at the MLoG-GenAI Workshop at KDD 2025 (oral).
+  links:
+    - label: Paper
+      url: https://doi.org/10.1145/3770854.3785699
+    - label: arXiv
+      url: https://arxiv.org/abs/2507.10183
+    - label: Code
+      url: https://github.com/alirezadizaji/T-GRAB
+    - label: Dataset
+      url: https://huggingface.co/datasets/Gilestel/T-GRAB
+- id: vpt
+  title: 'Interpretability in Action: Exploratory Analysis of VPT, a Minecraft Agent'
+  authors: Karolis Jucys, George Adamopoulos, Mehrab Hamidi, Stephanie Milani, Mohammad Reza Samsami, Artem Zholus, Sonia Joseph, Blake Richards, Irina Rish, Özgür Şimşek
+  year: 2024
+  venue: Mechanistic Interpretability Workshop at ICML 2024
+  type: Workshop
+  topic: Interpretability
+  selected: true
+  summary: Attention analysis and interventions in a Minecraft agent reveal clues about memory and a case of goal misgeneralization.
+  links:
+    - label: Paper
+      url: https://arxiv.org/abs/2407.12161
+    - label: Workshop
+      url: https://openreview.net/forum?id=7XtzYaSDi3
+    - label: Code
+      url: https://github.com/KarolisRam/vpt-mi
+- id: thesis
+  title: 'Bridging the Neural Divide: Geometrical Insights and Practical Approaches to Machine Learning Interpretability'
+  authors: Mehrab Hamidi
+  year: 2024
+  venue: MSc thesis · McGill University
+  type: Thesis
+  topic: Interpretability
+  selected: false
+  summary: A study of neural network geometry, reverse engineering, and practical interpretability in a vision-based agent.
+  links:
+    - label: Thesis PDF
+      url: /assets/pdf/Thesis.pdf
+- id: reverse-relu
+  title: Reverse Engineering Deep ReLU Networks An Optimization-based Algorithm
+  authors: Mehrab Hamidi
+  year: 2023
+  venue: arXiv preprint
+  type: Preprint
+  topic: Interpretability
+  selected: false
+  summary: An optimization-based approach to reconstructing deep ReLU networks from input-output queries.
+  links:
+    - label: Paper
+      url: https://arxiv.org/abs/2312.04675
+- id: covid-survival
+  title: Predicting survival of Iranian COVID-19 patients infected by various variants including omicron from CT Scan images and clinical data using deep neural networks
+  authors: Mahyar Ghafoori, Mehrab Hamidi, Rassa Ghavami Modegh, Alireza Aziz-Ahari, Neda Heydari, Zeynab Tavafizadeh, Omid Pournik, Sasan Emdadi, Saeed Samimi, Amir Mohseni, et al.
+  year: 2023
+  venue: Heliyon · Volume 9, Issue 11
+  type: Journal
+  topic: Applied ML
+  selected: false
+  summary: Combining clinical information and chest CT images to study patient survival prediction.
+  links:
+    - label: Paper
+      url: https://www.cell.com/heliyon/fulltext/S2405-8440(23)09173-9
+- id: gene-package
+  title: A New R Package for Categorizing Coding and Non-Coding Genes
+  authors: Masroor Bayati, Narges Rezaie, Mehrab Hamidi, Maedeh Sadat Tahaei, Hamid Rabiee
+  year: 2023
+  venue: Preprints
+  type: Preprint
+  topic: Applied ML
+  selected: false
+  summary: An R package for categorizing coding and non-coding genes.
+  links:
+    - label: Paper
+      url: https://europepmc.org/article/ppr/ppr592417
+- id: somatic
+  title: Somatic point mutations are enriched in non-coding RNAs with possible regulatory function in breast cancer
+  authors: Narges Rezaie, Masroor Bayati, Mehrab Hamidi, Maedeh Sadat Tahaei, Sadegh Khorasani, Nigel H. Lovell, James Breen, Hamid R. Rabiee, Hamid Alinejad-Rokny
+  year: 2022
+  venue: Communications Biology · Volume 5, Article 556
+  type: Journal
+  topic: Applied ML
+  selected: false
+  summary: Investigating somatic mutations in non-coding RNAs and their potential regulatory roles in breast cancer.
+  links:
+    - label: Paper
+      url: https://www.nature.com/articles/s42003-022-03528-0
+- id: covid-diagnosis
+  title: Accurate and Rapid Diagnosis of COVID-19 Pneumonia with Batch Effect Removal of Chest CT-Scans and Interpretable Artificial Intelligence
+  authors: Rassa Ghavami Modegh, Mehrab Hamidi, Saeed Masoudian, Amir Mohseni, Hamzeh Lotfalinezhad, Mohammad Ali Kazemi, Behnaz Moradi, Mahyar Ghafoori, et al.
+  year: 2020
+  venue: arXiv preprint
+  type: Preprint
+  topic: Applied ML
+  selected: false
+  summary: Interpretable deep learning for chest CT analysis, with preprocessing to reduce differences across medical centers.
+  links:
+    - label: Paper
+      url: https://arxiv.org/abs/2011.11736

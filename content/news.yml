@@ -1,0 +1,21 @@
+# A short update needs only a date, title, text, and optional link.
+- date: '2026-05-15'
+  category: Preprint
+  title: Geometry-aware sharpness minimization
+  text: Our new preprint explores how learned loss geometry and sharpness-aware minimization can work together.
+  url: https://arxiv.org/abs/2605.16134
+- date: '2026-04-19'
+  category: Publication
+  title: T-GRAB at KDD 2026
+  text: T-GRAB is published in the ACM SIGKDD proceedings, introducing diagnostic tasks for temporal graph learning.
+  url: https://doi.org/10.1145/3770854.3785699
+- date: '2025-07-22'
+  category: Workshop
+  title: T-GRAB workshop oral
+  text: The earlier version of T-GRAB was accepted for an oral presentation at the MLoG-GenAI Workshop at KDD 2025.
+  url: https://arxiv.org/abs/2507.10183
+- date: '2024-07-16'
+  category: Research
+  title: Looking inside a Minecraft agent
+  text: Our VPT interpretability paper is available on arXiv and appeared at the Mechanistic Interpretability Workshop at ICML 2024.
+  url: https://arxiv.org/abs/2407.12161
