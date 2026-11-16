@@ -212,7 +212,7 @@ These are exploratory results. An independent reducer checked the raw test array
 
 ## Finding the boundary of useful memory
 
-The next experiment fills in the load curve at 4, 8, 12, 16, 24, 32, 48 and 64 bits, with a fixed model size, longer acquisition training and three seeds. Each fit must acquire the task before we test forgetting. We will retain raw validation outputs, independently replay each final checkpoint, and use fresh held-out panels for delays up to 6,144 steps. The aim is to locate a retention-failure boundary, while distinguishing it from a failure to learn in the first place. A later, stronger extension will reveal a query address only after the body, testing access to an item that the model could not select in advance. Continuous-valued cues will test a different memory requirement from a finite set of bit vectors.
+The next experiment fills in the load curve at 4, 8, 12, 16, 24, 32, 48 and 64 bits, with a fixed model size, longer acquisition training and three seeds. Each fit must acquire the task before we test forgetting. We will retain raw validation outputs, reload and replay each final checkpoint, and use fresh held-out panels for delays up to 6,144 steps. The aim is to locate a retention-failure boundary, while distinguishing it from a failure to learn in the first place. A later, stronger extension will reveal a query address only after the body, testing access to an item that the model could not select in advance. Continuous-valued cues will test a different memory requirement from a finite set of bit vectors.
 
 For the graph model, training at several block lengths and with variable timing will test whether the failure timescale follows the training schedule. Multiple independent seeds are needed in both settings.
 
