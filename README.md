@@ -62,6 +62,8 @@ The build preserves author order and highlights Mehrab's name. It sorts by year,
 
 Edit `content/profile.yml` for the homepage and on-page CV details. The single **View CV (PDF)** button on `/cv/` opens `assets/pdf/cv_june2026.pdf`, the supplied June 2026 CV. To update that PDF later, replace this file while keeping its filename; the next deployment publishes it automatically. The old PDF URL is preserved for existing external links, but is no longer linked from the CV page. The thesis remains at its existing URL.
 
+The original portrait is kept in `assets/img/Mila_09_262739.jpg`, and the unchanged CV is in `assets/pdf/cv_june2026.pdf`. Both originals are committed to this repository and included in the published assets. `portfolio/static/portrait-mila.jpg` is a smaller web copy of the portrait.
+
 Use the sun/moon button in the header to switch between light and dark themes. Your choice is remembered across pages and visits; first-time visitors follow their system theme.
 
 The two initial blog notes summarize public coauthored work. They can be revised or unpublished by setting `draft: true`.

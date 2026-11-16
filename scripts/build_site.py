@@ -4,6 +4,7 @@ from datetime import date, datetime, timezone
 from email.utils import format_datetime
 from pathlib import Path
 import json
+import hashlib
 import re
 import shutil
 import xml.etree.ElementTree as ET
@@ -91,8 +92,9 @@ def main():
     env = Environment(loader=FileSystemLoader(ROOT / 'portfolio/templates'), autoescape=select_autoescape(['html']), undefined=StrictUndefined)
     env.filters['date_label'] = lambda value: date_value(value).strftime('%b %d, %Y')
     env.filters['author_highlight'] = lambda value: Markup('<strong>Mehrab Hamidi</strong>').join(escape(part) for part in value.split('Mehrab Hamidi'))
-    schema = {'@context': 'https://schema.org', '@type': 'Person', 'name': profile['name'], 'url': profile['url'], 'jobTitle': 'Machine Learning Researcher', 'image': profile['url'] + '/assets/portfolio/portrait.jpg', 'sameAs': [item['url'] for item in profile['links']]}
-    context = dict(profile=profile, publications=publications, news=news, posts=posts, year=TODAY.year, schema=schema, post=None)
+    schema = {'@context': 'https://schema.org', '@type': 'Person', 'name': profile['name'], 'url': profile['url'], 'jobTitle': 'Machine Learning Researcher', 'image': profile['url'] + '/assets/portfolio/portrait-mila.jpg', 'sameAs': [item['url'] for item in profile['links']]}
+    asset_version = hashlib.sha256(b''.join((ROOT / 'portfolio/static' / name).read_bytes() for name in ['site.css', 'site.js'])).hexdigest()[:12]
+    context = dict(asset_version=asset_version, profile=profile, publications=publications, news=news, posts=posts, year=TODAY.year, schema=schema, post=None)
     # Only this generated directory is replaced; authored content and legacy assets stay intact.
     if OUT.is_symlink():
         raise ValueError('_site must not be a symlink')
@@ -100,6 +102,8 @@ def main():
         shutil.rmtree(OUT)
     OUT.mkdir()
     shutil.copytree(ROOT / 'portfolio/static', OUT / 'assets/portfolio')
+    (OUT / 'assets/img').mkdir(parents=True)
+    shutil.copy2(ROOT / 'assets/img/Mila_09_262739.jpg', OUT / 'assets/img/Mila_09_262739.jpg')
     (OUT / 'assets/pdf').mkdir(parents=True)
     for filename in ['Thesis.pdf', 'cv_june2026.pdf', 'cv_2024_i.pdf', 'ICML2025_Template.pdf']:
         shutil.copy2(ROOT / 'assets/pdf' / filename, OUT / 'assets/pdf' / filename)
