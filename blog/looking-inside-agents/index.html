@@ -20,13 +20,13 @@
     (() => {
       let preference;
       try { preference = localStorage.getItem('mehrab-theme'); } catch (_) {}
-      const dark = preference === 'dark' || (preference !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const dark = preference === 'dark';
       document.documentElement.dataset.theme = dark ? 'dark' : 'light';
       document.querySelector('meta[name="theme-color"]').content = dark ? '#131c19' : '#f8f8f3';
     })();
   </script>
-  <link rel="stylesheet" href="/assets/portfolio/site.css?v=59be73d48602">
-  <script src="/assets/portfolio/site.js?v=59be73d48602" defer></script>
+  <link rel="stylesheet" href="/assets/portfolio/site.css?v=565bb783a090">
+  <script src="/assets/portfolio/site.js?v=565bb783a090" defer></script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "image": "https://mehrabhamidi99.github.io/assets/portfolio/portrait-mila.jpg", "jobTitle": "Machine Learning Researcher", "name": "Mehrab Hamidi", "sameAs": ["https://scholar.google.com/citations?user=hsU_jcQAAAAJ\u0026hl=en", "https://github.com/MehrabHamidi99", "https://www.linkedin.com/in/mehrab-hamidi-42025b192/", "https://mila.quebec/en/directory/mehrab-hamidi"], "url": "https://mehrabhamidi99.github.io"}</script>
 </head>
 <body>
