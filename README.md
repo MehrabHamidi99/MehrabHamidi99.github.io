@@ -60,7 +60,9 @@ The build preserves author order and highlights Mehrab's name. It sorts by year,
 
 ## Update bio, skills, CV, and contact
 
-Edit `content/profile.yml`. This powers the homepage and the current, printable `/cv/` page. On that page, choose **Print / save current CV**, then **Save as PDF** in your browser. The separately linked `assets/pdf/cv_2024_i.pdf` is the original 2024 PDF; it is labeled by year and is not automatically regenerated. The thesis remains at its existing URL.
+Edit `content/profile.yml` for the homepage and on-page CV details. The single **View CV (PDF)** button on `/cv/` opens `assets/pdf/cv_june2026.pdf`, the supplied June 2026 CV. To update that PDF later, replace this file while keeping its filename; the next deployment publishes it automatically. The old PDF URL is preserved for existing external links, but is no longer linked from the CV page. The thesis remains at its existing URL.
+
+Use the sun/moon button in the header to switch between light and dark themes. Your choice is remembered across pages and visits; first-time visitors follow their system theme.
 
 The two initial blog notes summarize public coauthored work. They can be revised or unpublished by setting `draft: true`.
 

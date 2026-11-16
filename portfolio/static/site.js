@@ -1,5 +1,31 @@
 'use strict';
 document.body.classList.add('js');
+const themeToggle = document.querySelector('.theme-toggle');
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+const savedTheme = () => {
+  try { return localStorage.getItem('mehrab-theme'); } catch (_) { return null; }
+};
+const applyTheme = theme => {
+  document.documentElement.dataset.theme = theme;
+  document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#131c19' : '#f8f8f3';
+  if (themeToggle) {
+    const label = theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+    themeToggle.setAttribute('aria-label', label);
+    themeToggle.title = label;
+  }
+};
+if (themeToggle) {
+  themeToggle.hidden = false;
+  applyTheme(document.documentElement.dataset.theme || (systemTheme.matches ? 'dark' : 'light'));
+  themeToggle.addEventListener('click', () => {
+    const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('mehrab-theme', theme); } catch (_) {}
+    applyTheme(theme);
+  });
+  systemTheme.addEventListener('change', event => {
+    if (!['light', 'dark'].includes(savedTheme())) applyTheme(event.matches ? 'dark' : 'light');
+  });
+}
 const menu = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#navigation');
 if (menu && navigation) {
@@ -47,5 +73,3 @@ if (controls) {
     update();
   }));
 }
-const printButton = document.querySelector('.print-button');
-if (printButton) { printButton.hidden = false; printButton.addEventListener('click', () => window.print()); }

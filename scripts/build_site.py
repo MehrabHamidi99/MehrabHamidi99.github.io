@@ -101,7 +101,7 @@ def main():
     OUT.mkdir()
     shutil.copytree(ROOT / 'portfolio/static', OUT / 'assets/portfolio')
     (OUT / 'assets/pdf').mkdir(parents=True)
-    for filename in ['Thesis.pdf', 'cv_2024_i.pdf', 'ICML2025_Template.pdf']:
+    for filename in ['Thesis.pdf', 'cv_june2026.pdf', 'cv_2024_i.pdf', 'ICML2025_Template.pdf']:
         shutil.copy2(ROOT / 'assets/pdf' / filename, OUT / 'assets/pdf' / filename)
     routes = []
 
