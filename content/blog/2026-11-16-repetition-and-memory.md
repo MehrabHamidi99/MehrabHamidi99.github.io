@@ -12,7 +12,7 @@ That is the question behind our [representation collapse project](https://github
 
 The theory gives us a precise language for that question. It also exposes a trap. **A shrinking perturbation, a low-dimensional state cloud, and the loss of useful memory are three different observations.** They can occur together, but none automatically establishes the others.
 
-Here is where the project stands, starting with experiments verified in October 2026 and a new exploratory follow-up from November 16. We have a reproduced graph prediction failure, suggestive but incomplete dynamical evidence, and a separate LSTM that remembers a bit perfectly through 6,144 distractor steps. Those results help narrow the explanation; they do not yet establish a general collapse mechanism.
+The evidence is mixed. We reproduced a graph prediction failure, but separate LSTMs retain one bit through 6,144 distractor steps and four bits through 1,536. The dynamical evidence remains incomplete. Together, these results narrow the question: what distinguishes a recurrent model that loses a useful memory from one that preserves it through repetition?
 
 ## Start with one complete cycle
 
@@ -180,7 +180,7 @@ The state geometry is mixed. In the reconstructed 32-step task, complete hidden-
 
 Changing block length also changes the temporal distribution relative to training. A model trained on 32-step blocks might anticipate a transition that never arrives. That learned-timing explanation remains plausible. Predicting a repeated graph can be solved from its latest observation, so this task does not directly isolate retention of a distant event.
 
-## A bit survives 6,144 distractor steps
+## Useful memory can survive repetition
 
 The direct memory task separates that issue: **write a bit, present a distractor body, then query the bit**. The bit is absent from all body and query inputs, so an LSTM must carry it in its recurrent state.
 
@@ -198,9 +198,7 @@ Pooled hidden-plus-cell participation ratio was close to one, while opposite-cue
 
 This is one trained seed and one bit, not a capacity estimate or proof of stable basins. It is nevertheless a valuable negative result for harmful repetition at the tested horizons. The graph and memory settings are separate experiments, not a controlled architecture comparison.
 
-## November 16 follow-up: four bits survive too
-
-We have now run a first memory-load experiment: write 1, 4, 16 or 64 independent bits at once, then recover the full vector after the body. Each load gets a separate seed-0 fit with the same architecture: 69 input channels and an LSTM with 64 hidden units. This is still categorical recall, not a continuous high-dimensional signal or a graph.
+We then increased the memory load: write 1, 4, 16 or 64 independent bits at once, then recover the full vector after the body. Each load gets a separate seed-0 fit with the same architecture: 69 input channels and an LSTM with 64 hidden units. This is still categorical recall, not a continuous high-dimensional signal or a graph.
 
 The 1-bit and 4-bit fits passed the worker's competence gates. Both recovered the complete vector in **every tested episode through 1,536 distractor steps**, in periodic and matched-control arms. Each fit was tested on ten conditions and 20,480 episode rows, with cue panels reused across conditions. The prespecified periodic-minus-control error contrast was zero. The 16-bit and 64-bit fits failed acquisition gates and stopped before held-out testing; those failures cannot establish repetition-induced forgetting.
 
@@ -212,9 +210,9 @@ The four-bit model's complete-state participation ratio increased from about **4
 
 These are exploratory results. An independent reducer checked the raw test arrays and covariance calculations, but validation logits and explicit counts were not saved: competence gates are verified only against their recorded summaries. The [full report](https://github.com/MehrabHamidi99/representation_collapse/blob/d1ad0790bda4b43f7f4bcebc7596e04d4b9a9ef4/docs/November/2026-11-16/mila/report/multibit-discovery-results.md) preserves that limitation and both failed fits. We have not measured a Floquet spectrum or established stable memory basins for these models.
 
-## The next question is about useful memory load
+## Finding the boundary of useful memory
 
-The immediate challenge is to make the larger-load models reliably acquire the task before testing forgetting, while retaining raw validation outputs and replaying the final checkpoint independently. New retention tests need fresh held-out panels and multiple seeds. A later, stronger extension will reveal a query address only after the body, testing access to an item that the model could not select in advance. Continuous-valued cues will test a different memory requirement from a finite set of bit vectors.
+The next experiment fills in the load curve at 4, 8, 12, 16, 24, 32, 48 and 64 bits, with a fixed model size, longer acquisition training and three seeds. Each fit must acquire the task before we test forgetting. We will retain raw validation outputs, independently replay each final checkpoint, and use fresh held-out panels for delays up to 6,144 steps. The aim is to locate a retention-failure boundary, while distinguishing it from a failure to learn in the first place. A later, stronger extension will reveal a query address only after the body, testing access to an item that the model could not select in advance. Continuous-valued cues will test a different memory requirement from a finite set of bit vectors.
 
 For the graph model, training at several block lengths and with variable timing will test whether the failure timescale follows the training schedule. Multiple independent seeds are needed in both settings.
 
