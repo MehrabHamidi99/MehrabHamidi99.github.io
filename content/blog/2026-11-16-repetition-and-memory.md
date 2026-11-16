@@ -1,123 +1,200 @@
 ---
-title: Does repetition make a recurrent model forget?
-summary: Longer graph repetitions hurt prediction, yet a simple LSTM remembers a bit through 6,144 steps. What these results tell us about representation collapse.
+title: 'Does repetition erase memory? A Floquet view'
+summary: What periodic dynamics can tell us about recurrent memory—and what graph failures, contracting trajectories, and a bit retained for 6,144 steps actually show.
 date: '2026-11-16'
 category: Research notes
 slug: repetition-and-memory
 draft: false
 ---
-If a model sees the same pattern again and again, its job ought to get easier. There is less new information to process, and a good guess is often simply “more of the same.”
+A model sees the same pattern again and again. Its internal activity settles into a rhythm. Some directions in its state shrink. Has it forgotten something?
 
-On a temporal graph task, we found something less reassuring: a trained recurrent model became worse at predicting a graph as that graph kept repeating. This led to the question behind our [representation collapse project](https://github.com/MehrabHamidi99/representation_collapse): **does repetition gradually erase information the model needs?**
+That is the question behind our [representation collapse project](https://github.com/MehrabHamidi99/representation_collapse). It started with temporal graph models that become worse at predicting a graph while that graph keeps repeating. Floquet theory seemed a natural way to investigate: study the internal dynamics over one cycle, then ask what survives repeated cycles.
 
-The results so far make that question more interesting. We reproduced a clear prediction failure. But when we gave a separate LSTM a direct memory task, it remembered its bit perfectly through thousands of repeated inputs. A low-dimensional state representation appeared alongside successful memory.
+The theory gives us a precise language for that question. It also exposes a trap. **A shrinking perturbation, a low-dimensional state cloud, and the loss of useful memory are three different observations.** They can occur together, but none automatically establishes the others.
 
-This is a research update, written in November from experiments verified in October 2026. The evidence is still narrow: one trained seed per setting, synthetic tasks, and no established general mechanism of harmful collapse.
+Here is where the project stands, based on experiments verified in October 2026. We have a reproduced graph prediction failure, suggestive but incomplete dynamical evidence, and a separate LSTM that remembers a bit perfectly through 6,144 distractor steps. Those results help narrow the explanation; they do not yet establish a general collapse mechanism.
 
-## A repeating graph that becomes harder to predict
+## Start with one complete cycle
 
-The starting point was [T-GRAB](https://arxiv.org/abs/2507.10183), our benchmark for testing temporal reasoning in graph models. Think of two graph snapshots, A and B, alternating in blocks:
+Write a recurrent model as:
 
-`AAAA…AAAA BBBB…BBBB AAAA…AAAA …`
+```text
+s[t+1] = F(s[t], x[t])
+```
 
-The model predicts the next graph from the sequence it has seen. In the setting we reconstructed, each block lasts 32 steps. A GC-LSTM combines graph processing with an LSTM's recurrent memory.
+The state `s` must contain everything carried between updates. For an LSTM, that includes both hidden and cell states. For a graph LSTM, it includes those states for all nodes, in a fixed ordering. Looking at the hidden vector alone can miss information carried elsewhere.
 
-After a 200-epoch training run, validation selected the checkpoint at epoch 160. Within the repeated blocks, its mean F1 fell from **0.959 in the early window to 0.819 in the late window**. F1 summarizes how well predicted edges match the true edges. That 14.05-point drop reproduces the qualitative behavior that motivated us in Figure 10 of T-GRAB. It is one corrected model reconstruction, rather than a reproduction of every method and seed in the original figure.
+Now suppose the input repeats every `P` steps, and the complete state follows a periodic orbit of that same period. At each step, a Jacobian `J[t]` describes how a small change in state affects the next state, while the input and weights remain fixed. The derivative of one full cycle is the ordered product:
 
-The distinction between *within a block* and *across cycles* matters. The pattern of errors was almost the same across successive cycles. We did not observe an endlessly worsening model each time A and B returned.
+```text
+M = J[P−1] ··· J[1] J[0]
+```
 
-Next, we kept the checkpoint fixed and stretched the blocks. We tested 8, 16, 32, 64, 128 and 256 repetitions, using both A-first and B-first sequences. Each run covered 2,048 prediction steps.
+The earliest update acts first, on the right. This matrix is the discrete *monodromy matrix*. Its eigenvalues, usually written `μ`, are the Floquet multipliers. They describe local stability of the periodic orbit.
 
-[![Mean F1 for a fixed GC-LSTM peaks near its training block length of 32 and falls for longer blocks, while a persistence baseline improves.](/assets/portfolio/repetition-graph.png)](/assets/portfolio/repetition-graph.png)
+There is an essential qualification: **periodic input alone does not make this a periodic return map**. A network may keep drifting, have a response with a longer period, or follow different trajectories depending on its history. We need to check that the complete state returns, and that the step derivatives repeat. If the state returns only after two input cycles, that longer period is the relevant one. Without verified periodicity, the same Jacobian product remains useful, but we call it a finite-time propagator.
 
-*One checkpoint and one graph realization; curves average the two starting orders. Persistence predicts the last observed graph. Its undefined first prediction is excluded, while the model's first prediction is included.*
+Period length also matters when comparing numbers. Following two cycles instead of one squares the multipliers, even though the dynamics have not changed. A multiplier of 0.8 over one cycle becomes 0.64 over two. To compare attenuation across different periods, use the rate per update:
 
-Mean F1 fell from **0.889 at 32 repetitions to 0.657 at 256**. Meanwhile, the simple persistence baseline improved from about 0.969 to 0.997: longer constant blocks mean fewer occasions when copying the last graph is wrong.
+```text
+rate = log(|μ|) / P
+```
 
-So there is a real prediction problem to explain. The state measurements, however, do not give a simple collapse story. In most of this sweep, the effective dimension of the complete hidden-plus-cell state increased from the early window to the late window, even as its total variance decreased. The size of the within-block performance drop was also not strictly monotone across the full sweep.
+Reporting a smaller multiplier without its time unit can therefore create a misleading impression of stronger contraction.
 
-One plausible explanation is a learned expectation about when the graph should change. A model trained on 32-step blocks may start anticipating a transition that never arrives. Changing block length also changes the temporal distribution relative to training. We have not yet separated those possibilities from information loss.
+## A contracting multiplier is not a forgetting verdict
 
-More fundamentally, **predicting the repeated graph does not require remembering a distant event**. The latest graph already gives a strong answer. To ask whether repetition destroys old information, we needed a task that actually requires it.
+For a small perturbation along an eigenvector, the linearized dynamics scale it by `μ` per cycle. After `k` cycles, its magnitude scales by `|μ|^k`. When all multipliers have magnitude below one, a smooth periodic orbit is locally attracting. Values above one indicate unstable directions; values exactly on the unit circle require more care.
 
-## Write a bit, wait, then ask for it
+That is a statement about small perturbations near a particular orbit. It does not tell us which perturbations encode the task, whether two different memories occupy different orbits, or whether a decoder can still read a weakened signal.
 
-The memory experiment has three parts:
+It also describes long-run local behavior more directly than short-run amplification. In a *nonnormal* system, directions can interact so that a disturbance grows temporarily even when all eigenvalues lie inside the unit circle. Singular values of the finite-time product tell us about that amplification. Eigenvalues and singular values answer related but different questions.
 
-1. **WRITE:** show the network a zero or a one.
-2. **BODY:** feed it a sequence of distractor symbols.
-3. **QUERY:** ask which bit it saw at the start.
+A tiny example helps. Consider:
 
-The bit is absent from the body and query inputs. The LSTM has to carry it in its recurrent state.
+```text
+s[t+1] = 0.5 s[t] + x[t]
+```
 
-We compare a periodic body, made by repeating one motif, with a varying-order control of the same length. The two bodies match symbol counts, adjacent transitions, run lengths and ending context. They still differ in higher-order structure and predictability; “matched” does not mean identical in every statistical property.
+Let the input alternate in the pattern AABB, with A equal to zero and B equal to one. The system approaches a nonconstant, four-step periodic response. Yet its one-cycle multiplier is simply:
 
-Before testing longer delays, we require the model to learn the task. This seed passed all three planned competence checks. We then froze its weights and evaluated new panels with both bit values and both body types.
+```text
+μ = 0.5⁴ = 1/16
+```
 
-It recalled the bit correctly in every tested episode through 384 body steps. A separately planned extension pushed the delay to **6,144 body steps**.
+Old state differences disappear while a visible rhythm continues, driven by the input. There is no requirement for a neutral multiplier of one just because the activity repeats. The external sequence supplies the timing. This is an analytic control, not a trained-network result.
 
-[![Bit recall remains at 100 percent for both periodic and matched-control inputs at delays of 768, 1,536, 3,072 and 6,144 body steps.](/assets/portfolio/repetition-memory.png)](/assets/portfolio/repetition-memory.png)
+## Why analog memory and a remembered bit differ
 
-*A separate, frozen one-bit LSTM. The two curves overlap exactly. The extension also tested longer symbol dwell at the same total body length, with the same perfect recall.*
+Suppose we want to store a continuously varying quantity exactly, rather than choose between a few labels. There is a useful classical constraint here, closely related to [Seung's work on continuous attractors](https://pmc.ncbi.nlm.nih.gov/articles/PMC24094/).
 
-Across all six extension conditions—**12,288 episode rows**—both arms scored 100%. Replacing the complete hidden and cell state with the opposite-bit donor's state made the model give that donor's answer. Zeroing the state reduced accuracy to 50%. Those checks establish that the answer depends on retained state; they do not identify a particular memory mechanism.
+Let a smooth encoder `E(u)` represent `d` continuous quantities over an open region of values, and let a smooth decoder `g` recover them exactly. If a common return map `R` leaves every encoded state fixed, then:
 
-This result is limited to one seed and one bit. It does not tell us how many independent items the model can store. But it is a useful negative finding: repetition did not erase the required bit over the horizons we tested. The different graph and memory tasks should not be treated as a controlled comparison of architectures.
+```text
+g(E(u)) = u          R(E(u)) = E(u)
+```
 
-## What the theory helps us distinguish
+Differentiating gives:
 
-The theoretical work has been most useful for catching tempting but invalid conclusions. These are established ideas and elementary derivations collected in our [theory notes](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-26/local/auto-research/theory-propositions.md), rather than a claim of a new general collapse theorem.
+```text
+Dg(E(u)) DE(u) = I   DR(E(u)) DE(u) = DE(u)
+```
 
-### Low dimension can be enough
+The first identity requires `d` independent encoding directions. The second says that the return map preserves each of them: it has at least `d` independent eigenvectors with eigenvalue +1.
 
-Imagine two well-separated points: one represents zero, the other one. Their centered covariance has rank one. That is all the geometry a one-bit task needs.
+The assumptions do real work. This is exact, smooth, invariant memory of a continuum. It is not a bound on participation ratio, and it does not directly describe approximate recall over a finite delay.
 
-More generally, an exactly periodic trajectory visiting only P distinct states has centered covariance rank at most P−1, however large the network is. Repeated observations alone can therefore make a state cloud look low-dimensional.
+A bit can be stored differently. Imagine two separate stable states, one for zero and one for one. Small disturbances shrink around each state, while the two states remain distinguishable. The same idea extends to separate attracting cycles under periodic input. Every local multiplier can be below one and the label can still survive.
 
-Our one-bit LSTM had a pooled hidden-plus-cell participation ratio close to one. Participation ratio measures how broadly variance is spread across directions. Recall was nevertheless perfect, and the measured separation between opposite-cue states grew. The state summaries came from the worker; the compact audits checked their provenance, but did not independently recompute the saved binary state arrays.
+This possibility is already present in prior research: [Pals, Macke and Barak](https://pmc.ncbi.nlm.nih.gov/articles/PMC10868787/) studied memory-selective, phase-locked cycles in trained recurrent networks. Our use of this distinction is a measurement guide, not a claim to have discovered attractor memory. We have not yet shown that our trained one-bit LSTM uses this mechanism.
 
-There is an opposite trap, too. Shrinking every state coordinate by the same factor leaves normalized participation ratio unchanged. Yet, against a fixed noise floor, the stored signal can become harder to recover. We need absolute scale, task recovery and geometry together.
+## When should input order matter?
 
-### An output can change without the stored difference disappearing
+Before interpreting an ordering effect in a gated network, it helps to know a case where no such memory effect is possible. Consider a noiseless affine recurrence with the same state matrix at every step:
 
-Consider a simple noiseless recurrence:
+```text
+s[t+1] = A s[t] + B x[t] + b
+```
 
-`s[t+1] = A s[t] + B x[t] + b`
+Start with two different written cues, then feed both the same body. After `H` steps, their state difference is `A^H` times the initial difference. At equal duration, changing the body's order changes a common offset, but not this cue-dependent difference.
 
-Here the same matrix A updates the state at every step. Start with two different written cues, then pass both through the same distractor body. After H steps, the difference between their states is:
+A fixed readout can still make different errors: the common offset may move the states across its decision boundary. So an ordering-dependent error does not, by itself, prove that the stored distinction has been destroyed.
 
-`difference after H steps = A^H × initial difference`
+A related null holds when each symbol has its own affine transition matrix and those matrices commute. Matching symbol counts then matches the product acting on cue differences. This concerns the noiseless cue signal; intermediate process noise can still accumulate differently across orders.
 
-At equal H, changing the order of the body inputs changes a common offset, but not that cue-dependent difference. A fixed readout can still make different errors because the whole representation has shifted relative to its decision boundary.
+Noncommuting matrices can produce different ordered products, but that is only an opportunity for a task effect. The products might differ entirely outside the directions that carry the required cue. Our target is therefore more specific: **does the periodic order damage task-relevant distinctions more than a same-length control does?** The [theory notes](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-26/local/auto-research/theory-propositions.md) collect these established results, elementary derivations and open questions.
 
-This is a useful null model. It tells us to distinguish a damaged memory signal from a readout operating in the wrong region. It is not a theorem that LSTM gates behave linearly, nor does it guarantee that either input order preserves memory.
+## Dimension can mislead in both directions
 
-### Stable memory can involve contraction
+Two distinct points can encode a bit perfectly. Their centered covariance has rank one. More generally, a periodic orbit visiting only `P` distinct states has centered covariance rank at most `P−1`, however large the network is. A low-dimensional picture can reflect the sampling geometry rather than lost information.
 
-For a finite set of labels, a system can store each label in a separate stable state or cycle. Small disturbances can shrink around each state while the label identities remain distinct. Local contraction can then help protect memory. We have not demonstrated that the trained one-bit LSTM uses this mechanism.
+Participation ratio summarizes how broadly covariance variance is spread across directions. It is useful, but it ignores uniform changes in scale. Shrink every coordinate by the same factor and participation ratio stays unchanged, even though recovering the signal against a fixed noise floor may become harder.
 
-Exact analog memory is more demanding. Suppose a smooth encoder stores d continuously varying quantities, a smooth decoder recovers them exactly, and a common return map leaves every encoded state fixed. Differentiating those conditions shows that the encoding needs d independent directions, and the return map must preserve those directions with eigenvalue one. This statement relies on exact, smooth, invariant storage. It does not apply directly to a finite set of labels or approximate finite-horizon recall.
+There is a stronger warning in our [analytic folding counterexample](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-15/local/auto-research/folding-memory-counterexample-2026-10-15.md). Encode a balanced bit as the sign of `x`, with its magnitude chosen independently. A deterministic update squares `x`, then applies a fixed centering and rescaling. Positive and negative inputs with the same magnitude become identical: the bit is irreversibly lost.
 
-That distinction is why contraction alone cannot settle the memory question.
+The example chooses the magnitude distribution and scale so that the complete two-dimensional state's covariance is exactly unchanged. An independent nuisance coordinate supplies the second dimension. At every realized input state, the one-step Jacobian's singular values are at least one. There is no local contracting direction, yet one bit becomes zero recoverable bits because the map folds two separated branches together.
 
-## Where Floquet analysis fits
+This is an exact one-update construction, not a recurrent benchmark or Floquet result. It explains why local derivatives alone cannot detect every form of information loss: they compare infinitesimal neighbors, while the lost distinction can lie between distant branches.
 
-Floquet analysis studies how small disturbances evolve around a periodic trajectory. For a recurrent model, we multiply the step Jacobians in time order to describe one full cycle.
+These controls have practical value. The project's basic calibration and mechanism suites contain 10 and 36 checks, respectively, covering such issues as product ordering, known spectra, attenuation and retained categorical memory. Passing them validates the measurement code. It supplies no empirical evidence that a trained model collapses.
 
-But a repeating input does not guarantee that the complete internal state repeats. An LSTM's state includes both its hidden state and its cell state; a graph model also carries the node structure of that state. We must check the trajectory before treating the product as a periodic return map. Without that check, it remains a finite-time sensitivity calculation.
+## What the dynamical evidence actually shows
 
-**These trained-model experiments have not yet measured a Floquet spectrum.** They establish behavioral results and state diagnostics. The dynamical explanation is still work ahead.
+We recovered older graph-analysis arrays and independently checked their numerical integrity. Six saved eigenvalue magnitudes lie between **0.379784 and 0.407370**, and saved vector norms decrease across prefix files. Those observations are compatible with attenuation in the stored calculation.
 
-## The next experiments
+But an important defect in interpretation emerged: in each of 19 envelope files, **all 20 stored time rows are byte-identical**. That axis cannot describe 20 changing dynamical states. The inspected source suggests one possible explanation, but the original producer has not been established.
 
-The immediate priority is to move from one bit to **several independently written bits**, with the query address revealed only after the distractor body. We should first verify that every address is reliably learned, then vary memory load and repetition at fixed weights. That starts to measure an operational memory limit.
+The exact checkpoint, product chronology, state adapter, eigenpair residuals and orbit closure also remain unlinked. Six values are a partial saved spectrum; they cannot certify the full spectrum or its leading modes. The [archive audit](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-14/local/auto-research/legacy-floquet-array-audit-results-2026-10-14.md) therefore treats these as recovered numerical outputs, not verified Floquet multipliers of a trained periodic orbit.
 
-For the graph model, we need checkpoints trained at several block lengths and with variable timing. If the failure timescale moves with the training schedule, that would support the learned-timing explanation. Multiple independent training seeds will tell us whether either result is typical.
+The early memory pilots offer another caution. An [independent reduction](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-26/local/auto-research/periodicity-independent-results.md) found all 64 measured 12-step manual tangent gains below one, roughly **0.00417–0.0126**. Paired cue differences became tiny in both forcing arms. Yet all four checkpoints failed their original native-competence gates: they had not reliably learned the required task.
 
-Finally, we want to connect behavior to state dynamics: test whether alternative readouts recover apparently lost information, perturb candidate memory directions alongside matched shams, and measure complete-state sensitivity. Only then should we carry the same controlled questions into other modalities.
+Those products demonstrate local attenuation in the diagnostic calculation. They do not demonstrate that repetition erased a skill the models had acquired. They were finite-time products, not certified monodromy matrices, and both-arm attenuation does not establish an ordering-specific effect. This is why competence comes before a forgetting claim.
 
-The project began with a suspicion that repetition collapses useful representations. The results so far have made the target more precise: **when does repetition remove information the task needs, and when does it leave a compact, useful memory intact?** Both outcomes belong in the explanation.
+## The graph failure is real; its mechanism is open
 
-## Results and code
+The behavioral starting point was [T-GRAB](https://arxiv.org/abs/2507.10183), our diagnostic benchmark for temporal graph reasoning. Two snapshots, A and B, alternate in constant blocks. The model predicts the next graph from the sequence it has observed.
 
-The [project repository](https://github.com/MehrabHamidi99/representation_collapse) contains the code, protocols and evidence. The detailed reports cover the [GC-LSTM reconstruction](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-20/local/auto-research/figure10-gclstm-longfit-results-2026-10-20.md), [graph repetition sweep](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-20/local/auto-research/repetition-dwell-results-2026-10-20.md), and [long-horizon one-bit experiment](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-23/local/auto-research/onebit-long-horizon-results-2026-10-23.md). Numerical checks and successful jobs support those specific findings; they do not establish universal collapse.
+We reconstructed a GC-LSTM trained with 32-step blocks. After 200 training epochs, validation selected epoch 160. Mean F1 fell from **0.959 in an early within-block window to 0.819 in a late window**, a 14.05-point drop. That reproduces the qualitative behavior motivating Figure 10, for one corrected model and seed. It is not the full original multi-method, multi-seed reproduction.
+
+The error pattern was almost the same across successive cycles. We observed deterioration within a block, rather than an endlessly worsening model each time A and B returned.
+
+Keeping that checkpoint fixed, we tested block lengths 8, 16, 32, 64, 128 and 256, with both starting orders and 2,048 predictions per condition.
+
+[![GC-LSTM mean F1 peaks near its training block length of 32 and falls for longer blocks, while persistence improves.](/assets/portfolio/repetition-graph.png)](/assets/portfolio/repetition-graph.png)
+
+*One checkpoint and one graph realization; curves average A-first and B-first runs. Persistence copies the last graph. Its undefined first prediction is excluded, while the model's first prediction is included.*
+
+Mean F1 fell from **0.889 at length 32 to 0.657 at 256**, while persistence improved from about 0.969 to 0.997. Longer constant blocks give persistence fewer transitions to miss. The learned model has a substantial failure to explain.
+
+The state geometry is mixed. In the reconstructed 32-step task, complete hidden-plus-cell participation ratio declined modestly within each motif, while variance attenuated strongly. In the longer-block sweep, that participation ratio increased early-to-late in every condition through length 128. The within-block performance drop was not strictly monotone either.
+
+Changing block length also changes the temporal distribution relative to training. A model trained on 32-step blocks might anticipate a transition that never arrives. That learned-timing explanation remains plausible. Predicting a repeated graph can be solved from its latest observation, so this task does not directly isolate retention of a distant event.
+
+## A bit survives 6,144 distractor steps
+
+The direct memory task separates that issue: **write a bit, present a distractor body, then query the bit**. The bit is absent from all body and query inputs, so an LSTM must carry it in its recurrent state.
+
+We compare periodic repetition of one motif with a varying-order body of equal duration. The arms match symbol counts, adjacent transitions, run lengths and ending context. Higher-order structure and predictability still differ; this is a specified ordering intervention, not a match of every statistic.
+
+The seed passed all three planned competence checks. With weights frozen, it recalled the bit in every tested episode through 384 body steps. A separately planned extension reached **6,144 body steps**.
+
+[![One-bit accuracy stays at 100 percent for both periodic and control bodies through 6,144 steps.](/assets/portfolio/repetition-memory.png)](/assets/portfolio/repetition-memory.png)
+
+*One frozen LSTM; the curves overlap exactly. Additional conditions changed symbol dwell at the same total delay and also preserved recall.*
+
+Across the extension's six conditions and **12,288 episode rows**, both arms scored 100%. Complete-state opposite-bit swaps made the model answer with the donor's bit; zeroing the state reduced accuracy to 50%. These checks establish dependence on retained state without identifying its storage mechanism.
+
+Pooled hidden-plus-cell participation ratio was close to one, while opposite-cue state separation grew. Low effective dimension coexisted with useful recall. The worker produced those state summaries; compact audits verified their provenance, but did not independently recompute the saved binary arrays.
+
+This is one trained seed and one bit, not a capacity estimate or proof of stable basins. It is nevertheless a valuable negative result for harmful repetition at the tested horizons. The graph and memory settings are separate experiments, not a controlled architecture comparison.
+
+## The next question is about useful memory load
+
+We are preparing a higher-dimensional memory task that writes 1, 4, 16 or 64 independent bits at once, then asks the model to recover the full vector after the distractor body. The architecture stays fixed across loads: 69 input channels and an LSTM with 64 hidden units. Each load must first pass its competence checks before we interpret forgetting. We can then vary repetition and delay at fixed weights, comparing paired periodic and control bodies. A later, stronger extension will reveal a query address only after the body, testing access to an item that the model could not select in advance.
+
+For the graph model, training at several block lengths and with variable timing will test whether the failure timescale follows the training schedule. Multiple independent seeds are needed in both settings.
+
+The next dynamical measurements must connect to the task: complete-state Jacobian products, orbit-closure checks, finite-time gains, alternative readouts, and perturbations of proposed memory directions with matched shams. We should examine categorical basin separation alongside local contraction. Native tests in other modalities follow once the same question and controls work here.
+
+Floquet theory gives us a disciplined way to study repeated dynamics. The experiments tell us which parts of that theory are actually relevant. Our goal is to explain **when repetition destroys a task-required distinction, and when it leaves a compact, useful memory intact**. The evidence so far requires room for both.
+
+## Evidence and further reading
+
+The [project repository](https://github.com/MehrabHamidi99/representation_collapse) contains source, protocols and preserved evidence. Detailed reports cover the [GC-LSTM reconstruction](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-20/local/auto-research/figure10-gclstm-longfit-results-2026-10-20.md), [repetition-length sweep](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-20/local/auto-research/repetition-dwell-results-2026-10-20.md), and [one-bit extension](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-23/local/auto-research/onebit-long-horizon-results-2026-10-23.md). The reconstructed graph and one-bit experiments provide behavioral and state evidence; neither has a measured, certified trained-model Floquet spectrum yet.
+
+
+## Cite this post
+
+Hamidi, Mehrab. “Does repetition erase memory? A Floquet view.” Research blog post, November 16, 2026. [Permanent link](https://mehrabhamidi99.github.io/blog/repetition-and-memory/).
+
+```bibtex
+@misc{hamidi2026repetitionmemory,
+  author = {Mehrab Hamidi},
+  title = {Does repetition erase memory? A {Floquet} view},
+  year = {2026},
+  month = {nov},
+  howpublished = {Research blog post},
+  url = {https://mehrabhamidi99.github.io/blog/repetition-and-memory/},
+  note = {Published November 16, 2026}
+}
+```

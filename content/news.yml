@@ -1,8 +1,8 @@
 # A short update needs only a date, title, text, and optional link.
 - date: '2026-11-16'
   category: Research
-  title: Repetition, prediction, and memory
-  text: A new research note follows a graph prediction failure and an LSTM that remembers a bit through 6,144 steps, and explains what they tell us about representation collapse.
+  title: A Floquet view of recurrent memory
+  text: A research note explains what periodic dynamics can reveal about memory, alongside graph prediction failures, incomplete contraction evidence, and a bit retained through 6,144 steps.
   url: /blog/repetition-and-memory/
 - date: '2026-05-15'
   category: Preprint
