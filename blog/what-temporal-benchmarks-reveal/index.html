@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What a temporal graph benchmark can reveal · Mehrab Hamidi</title>
+  <meta name="description" content="Why controlled tasks help us ask more precise questions about a model&#39;s ability to reason across time.">
+  <meta name="theme-color" content="#f8f8f3">
+  <link rel="canonical" href="https://mehrabhamidi99.github.io/blog/what-temporal-benchmarks-reveal/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What a temporal graph benchmark can reveal · Machine Learning Research">
+  <meta property="og:description" content="Why controlled tasks help us ask more precise questions about a model&#39;s ability to reason across time.">
+  <meta property="og:url" content="https://mehrabhamidi99.github.io/blog/what-temporal-benchmarks-reveal/">
+  <meta property="og:image" content="https://mehrabhamidi99.github.io/assets/portfolio/portrait.jpg">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/assets/portfolio/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="Mehrab Hamidi · Blog" href="/feed.xml">
+  <link rel="stylesheet" href="/assets/portfolio/site.css">
+  <script src="/assets/portfolio/site.js" defer></script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "image": "https://mehrabhamidi99.github.io/assets/portfolio/portrait.jpg", "jobTitle": "Machine Learning Researcher", "name": "Mehrab Hamidi", "sameAs": ["https://scholar.google.com/citations?user=hsU_jcQAAAAJ\u0026hl=en", "https://github.com/MehrabHamidi99", "https://www.linkedin.com/in/mehrab-hamidi-42025b192/", "https://mila.quebec/en/directory/mehrab-hamidi"], "url": "https://mehrabhamidi99.github.io"}</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="wordmark" href="/" aria-label="Mehrab Hamidi home"><span class="monogram">mh<span>·</span></span><span>Mehrab Hamidi</span></a>
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="navigation" hidden>Menu <span aria-hidden="true">☰</span></button>
+    <nav id="navigation" aria-label="Main navigation">
+      
+      <a href="/" >About</a>
+      
+      <a href="/publications/" >Publications</a>
+      
+      <a href="/news/" >News</a>
+      
+      <a href="/blog/" aria-current="page">Blog</a>
+      
+      <a href="/cv/" >CV</a>
+      
+      <a class="nav-contact" href="mailto:mehrab.hamidi@mila.quebec">Get in touch <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+<main id="main"><article class="container page-content article-container"><a class="back-link" href="/blog/">← All research notes</a><header class="page-heading"><div class="eyebrow">Research notes / 2 min read</div><h1>What a temporal graph benchmark can reveal</h1><p class="article-summary">Why controlled tasks help us ask more precise questions about a model&#39;s ability to reason across time.</p><div class="article-byline">Mehrab Hamidi <span>·</span> <time datetime="2026-11-16">Nov 16, 2026</time></div></header><div class="prose"><p>A strong result on a graph dataset is useful. Understanding <em>which temporal skills</em> produced that result is a different question.</p>
+<p>Temporal graph models encounter relationships that change over time: interactions repeat, an event can have a delayed consequence, and relevant information can be distant in both the graph and its history. A single aggregate score can hide which of these patterns a model actually captures.</p>
+<h2 id="isolate-the-skill">Isolate the skill</h2>
+<p><a href="https://arxiv.org/abs/2507.10183">T-GRAB</a>, a paper I coauthored, studies these questions with controlled synthetic tasks. The benchmark separates skills such as remembering repeated events, tracking delayed effects, and using long-range dependencies. Its evaluation of 11 temporal graph learning methods reveals gaps that can be difficult to diagnose from real-world benchmarks alone.</p>
+<p>The practical value is diagnostic: when a model struggles, the task gives us a clearer account of <em>what</em> it struggled with.</p>
+<h2 id="from-a-score-to-a-question">From a score to a question</h2>
+<p>For someone building or evaluating a temporal learning system, this suggests a useful sequence:</p>
+<ol>
+<li>Identify the temporal pattern the application needs.</li>
+<li>Test that pattern in a controlled setting.</li>
+<li>Examine where performance changes as the task becomes harder.</li>
+<li>Return to realistic data to check whether the lesson transfers.</li>
+</ol>
+<p>Synthetic tasks simplify the world. Success on them does not establish that a model will handle every real-world setting. Their value is that they make some failure modes easier to see and discuss.</p>
+<h2 id="explore-the-work">Explore the work</h2>
+<p>The <a href="https://doi.org/10.1145/3770854.3785699">KDD 2026 paper</a>, <a href="https://github.com/alirezadizaji/T-GRAB">open-source code</a>, and <a href="https://huggingface.co/datasets/Gilestel/T-GRAB">dataset</a> provide starting points for exploring these questions.</p></div><div class="article-footer"><p>Questions or ideas? <a href="mailto:mehrab.hamidi@mila.quebec">Get in touch ↗</a></p><a href="/blog/">← Back to the blog</a></div></article></main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div><a class="footer-name" href="/">Mehrab Hamidi<span class="accent">.</span></a><p>Machine learning research · Montréal</p></div>
+    <div class="footer-links"><a href="mailto:mehrab.hamidi@mila.quebec">Email ↗</a><a href="https://github.com/MehrabHamidi99">GitHub ↗</a><a href="/feed.xml">RSS ↗</a></div>
+    <p class="copyright">© 2026 Mehrab Hamidi</p>
+  </div>
+</footer>
+</body>
+</html>
