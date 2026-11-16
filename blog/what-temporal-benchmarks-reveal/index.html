@@ -15,6 +15,16 @@
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/portfolio/favicon.svg" type="image/svg+xml">
   <link rel="alternate" type="application/rss+xml" title="Mehrab Hamidi · Blog" href="/feed.xml">
+  <script>
+    // Apply the saved preference before styles load to avoid a theme flash.
+    (() => {
+      let preference;
+      try { preference = localStorage.getItem('mehrab-theme'); } catch (_) {}
+      const dark = preference === 'dark' || (preference !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      document.querySelector('meta[name="theme-color"]').content = dark ? '#131c19' : '#f8f8f3';
+    })();
+  </script>
   <link rel="stylesheet" href="/assets/portfolio/site.css">
   <script src="/assets/portfolio/site.js" defer></script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "image": "https://mehrabhamidi99.github.io/assets/portfolio/portrait.jpg", "jobTitle": "Machine Learning Researcher", "name": "Mehrab Hamidi", "sameAs": ["https://scholar.google.com/citations?user=hsU_jcQAAAAJ\u0026hl=en", "https://github.com/MehrabHamidi99", "https://www.linkedin.com/in/mehrab-hamidi-42025b192/", "https://mila.quebec/en/directory/mehrab-hamidi"], "url": "https://mehrabhamidi99.github.io"}</script>
@@ -24,7 +34,7 @@
 <header class="site-header">
   <div class="container header-inner">
     <a class="wordmark" href="/" aria-label="Mehrab Hamidi home"><span class="monogram">mh<span>·</span></span><span>Mehrab Hamidi</span></a>
-    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="navigation" hidden>Menu <span aria-hidden="true">☰</span></button>
+
     <nav id="navigation" aria-label="Main navigation">
       
       <a href="/" >About</a>
@@ -37,8 +47,15 @@
       
       <a href="/cv/" >CV</a>
       
-      <a class="nav-contact" href="mailto:mehrab.hamidi@mila.quebec">Get in touch <span aria-hidden="true">↗</span></a>
+      <a class="button button-primary nav-contact" href="mailto:mehrab.hamidi@mila.quebec">Get in touch <span aria-hidden="true">↗</span></a>
     </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" hidden>
+        <svg class="theme-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 13.1A8.5 8.5 0 0 1 10.9 3.5 8.5 8.5 0 1 0 20.5 13.1Z"/></svg>
+        <svg class="theme-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="navigation" hidden>Menu <span aria-hidden="true">☰</span></button>
+    </div>
   </div>
 </header>
 <main id="main"><article class="container page-content article-container"><a class="back-link" href="/blog/">← All research notes</a><header class="page-heading"><div class="eyebrow">Research notes / 2 min read</div><h1>What a temporal graph benchmark can reveal</h1><p class="article-summary">Why controlled tasks help us ask more precise questions about a model&#39;s ability to reason across time.</p><div class="article-byline">Mehrab Hamidi <span>·</span> <time datetime="2026-11-16">Nov 16, 2026</time></div></header><div class="prose"><p>A strong result on a graph dataset is useful. Understanding <em>which temporal skills</em> produced that result is a different question.</p>
