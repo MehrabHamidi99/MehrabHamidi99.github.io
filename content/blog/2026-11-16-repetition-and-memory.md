@@ -64,6 +64,36 @@ Let the input alternate in the pattern AABB, with A equal to zero and B equal to
 
 Old state differences disappear while a visible rhythm continues, driven by the input. There is no requirement for a neutral multiplier of one just because the activity repeats. The external sequence supplies the timing. This is an analytic control, not a trained-network result.
 
+## How we would measure the largest modes
+
+“Measure the largest eigenvalue” sounds simple, but two different quantities matter:
+
+```text
+spectral radius:       ρ(M) = max |μ|
+largest singular value: σ_max(M) = max ||Mv|| / ||v||, over v ≠ 0
+```
+
+The spectral radius governs asymptotic growth in the linearized cycle dynamics. The largest singular value gives the largest possible Euclidean amplification in one cycle. Covariance eigenvalues measure how state variation is distributed; they are neither of these dynamical quantities.
+
+For a concrete analytic example, take:
+
+```text
+M = [[0.8, 4.0],
+     [0.0, 0.8]]
+```
+
+Both eigenvalues are 0.8, so the spectral radius is 0.8. Yet the largest singular value is approximately **4.154**. Some perturbations initially grow by more than fourfold before eventually decaying. A negative asymptotic rate therefore does not mean that every cycle, phase or perturbation shrinks monotonically. This example describes a linear map, not a measured network.
+
+For a large graph LSTM, explicitly storing the full matrix may be impractical. We can instead implement its action on a vector. Starting from a perturbation of **all hidden and cell coordinates across all nodes**, apply a Jacobian–vector product at each saved trajectory step in chronological order. That gives `Mv` without materializing `M`. An Arnoldi iteration can use this operation to estimate eigenvalues of large magnitude and their eigenvectors.
+
+The transpose action uses vector–Jacobian products through the same trajectory in reverse order. Combining the two actions lets an iterative method estimate the largest eigenvalue of `MᵀM`; its square root is the largest singular value. Both computations require fixed weights, replayed inputs and the same complete-state definition. Calling the eigenvalues Floquet multipliers additionally requires the orbit and period checks described above.
+
+Our planned checks are deliberately redundant: match dense products on small cases, compare propagated perturbations against finite differences at decreasing amplitudes, and inspect each candidate eigenpair's relative residual—the size of `Mv−μv` compared with the sizes of `Mv` and `μv`. Repeat with different starting vectors, restart settings, Krylov basis sizes and precision. Compare cycle phases too: nonzero Floquet eigenvalues should agree for an exact periodic orbit, while singular values can depend on phase.
+
+A small residual supports a particular approximate eigenpair; it does not prove that no larger eigenvalue was missed. One Arnoldi run or a partial spectrum cannot certify the true global spectral radius. A conclusion that the orbit is locally attracting requires evidence that the **full** spectral radius is below one, with adequate convergence or a suitable bound.
+
+Even then, the leading mode need not carry the remembered variable. We must also propagate cue-related directions or compare finite cue differences and task recovery. This [measurement programme](https://github.com/MehrabHamidi99/representation_collapse/blob/b45b354d25731e773aea7dc88dc10f2c877fbe16/docs/October/2026-10-26/local/auto-research/research-program.md) remains pending for the reconstructed trained GC-LSTM. The six recovered values discussed below are not verified leading modes.
+
 ## Why analog memory and a remembered bit differ
 
 Suppose we want to store a continuously varying quantity exactly, rather than choose between a few labels. There is a useful classical constraint here, closely related to [Seung's work on continuous attractors](https://pmc.ncbi.nlm.nih.gov/articles/PMC24094/).
