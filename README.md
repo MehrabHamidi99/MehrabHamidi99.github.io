@@ -64,7 +64,7 @@ Edit `content/profile.yml` for the homepage and on-page CV details. The single *
 
 The original portrait is kept in `assets/img/Mila_09_262739.jpg`, and the unchanged CV is in `assets/pdf/cv_june2026.pdf`. Both originals are committed to this repository and included in the published assets. `portfolio/static/portrait-mila.jpg` is a smaller web copy of the portrait.
 
-Use the sun/moon button in the header to switch between light and dark themes. Your choice is remembered across pages and visits; first-time visitors follow their system theme.
+Use the sun/moon button in the header to switch between light and dark themes. Light mode is the default. Your explicit light/dark choice is remembered across pages and visits, regardless of the browser or operating-system theme.
 
 The two initial blog notes summarize public coauthored work. They can be revised or unpublished by setting `draft: true`.
 
