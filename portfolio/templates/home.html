@@ -13,7 +13,15 @@
   </div>
   <figure class="portrait-block"><div class="portrait-frame"><img src="/assets/portfolio/portrait-mila.jpg" alt="Mehrab Hamidi" width="800" height="1200" fetchpriority="high"></div><figcaption><span>PhD student · Université de Montréal</span><span>Researcher · Mila, Quebec AI Institute</span></figcaption><span class="portrait-index" aria-hidden="true">MH / MONTRÉAL</span></figure>
 </section>
-<div class="affiliation-strip"><div class="container"><span class="eyebrow">Research & education</span><span>Mila</span><span>Université de Montréal</span><span>McGill University</span><span>Sharif University of Technology</span></div></div>
+<section class="affiliation-strip" aria-label="Research and education affiliations">
+  <div class="container affiliation-inner">
+    <span class="eyebrow affiliation-label">Research & education</span>
+    <a class="affiliation affiliation-mila" href="https://mila.quebec/en"><img src="/assets/portfolio/logos/mila.svg" alt="Mila – Quebec AI Institute" width="170" height="50"></a>
+    <a class="affiliation affiliation-udem" href="https://www.umontreal.ca/"><img src="/assets/portfolio/logos/udem.svg" alt="Université de Montréal" width="351" height="134"></a>
+    <a class="affiliation affiliation-mcgill" href="https://www.mcgill.ca/"><img src="/assets/portfolio/logos/mcgill.svg" alt="McGill University" width="2279" height="534"></a>
+    <a class="affiliation affiliation-sharif" href="https://www.sharif.edu/"><img src="/assets/portfolio/logos/sharif.svg" alt="Sharif University of Technology emblem" width="1418" height="1417"><span class="affiliation-name">Sharif University<br>of Technology</span></a>
+  </div>
+</section>
 <section class="section container" id="research">
   <div class="section-heading"><div><div class="eyebrow">Research directions</div><h2>Making learning systems<br>more understandable.</h2></div><p>I connect theoretical questions about neural networks with experiments that reveal how models behave.</p></div>
   <div class="research-grid">{% for area in profile.research %}<article class="research-area"><span class="area-number">{{ area.number }} /</span><h3>{{ area.title }}</h3><p>{{ area.text }}</p><div class="tags">{% for tag in area.tags %}<span>{{ tag }}</span>{% endfor %}</div></article>{% endfor %}</div>

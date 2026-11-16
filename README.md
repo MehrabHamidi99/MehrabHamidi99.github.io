@@ -103,3 +103,17 @@ Recent additions were checked on 16 November 2026:
 - [VPT interpretability](https://arxiv.org/abs/2407.12161): Mechanistic Interpretability Workshop at ICML 2024.
 - Thesis title and year follow the title page of the existing `assets/pdf/Thesis.pdf` (December 2024).
 - Education, experience, scholarship, and tools follow the existing site/CV. No hiring outcomes, citation counts, or unpublished publications are claimed.
+
+
+## Affiliation logos
+
+The homepage affiliation strip links to Mila, Université de Montréal, McGill, and Sharif. SVG files are stored locally in `portfolio/static/logos/` so the live site does not depend on third-party image hosting. Monochrome display keeps the logos legible in both themes; their original artwork is retained.
+
+Asset sources:
+
+- Mila: [official website SVG](https://mila.quebec/sites/default/themes/mila_v1/logo.svg).
+- UdeM: the `udem-logo-udem` SVG embedded in the [official website stylesheet](https://www.umontreal.ca/typo3temp/udemlessc/lessphp_9477013ded911f281ce354ea476ce0ead34a363a.css?1769692499).
+- McGill: [white logo hosted by Mila](https://mila.quebec/sites/default/themes/mila_v1/assets/images/logos/mcgill-logo-white.svg), where McGill is an institutional partner.
+- Sharif: [university emblem on Persian Wikipedia](https://fa.wikipedia.org/wiki/پرونده:Sharif_logo.svg), [original SVG](https://upload.wikimedia.org/wikipedia/fa/a/a9/Sharif_logo.svg). The university websites timed out when sourcing the asset.
+
+Institution names and marks identify research and educational affiliations. Rights to the marks remain with their respective institutions.
